@@ -54,4 +54,3 @@ impl UserRepository {
             .map_err(map_errors)
     }
 }
-
