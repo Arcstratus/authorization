@@ -32,13 +32,17 @@ async fn main() -> std::io::Result<()> {
     };
 
     let repository = UserRepository::new(pool.clone());
-    let service = UserService::new(repository);
+    let service = UserService::new(repository, settings.clerk_config());
 
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default())
             .app_data(web::Data::new(service.clone()))
-            .service(web::scope("/api").route("/user", web::get().to(controller::list_users)))
+            .service(
+                web::scope("/api")
+                    .route("/user", web::get().to(controller::list_users))
+                    .route("/user", web::post().to(controller::login_or_register)),
+            )
     })
     .bind(settings.server_addr())?
     .run()

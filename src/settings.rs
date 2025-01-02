@@ -1,3 +1,4 @@
+use clerk_rs::ClerkConfiguration;
 use dotenv::dotenv;
 use std::env;
 use thiserror::Error;
@@ -18,6 +19,7 @@ pub struct Settings {
     host: String,
     port: u16,
     db: String,
+    clerk_secret_key: String,
 }
 
 impl Settings {
@@ -30,6 +32,8 @@ impl Settings {
                 .unwrap_or_else(|_| "8080".to_string())
                 .parse()?,
             db: env::var("ARCSTRATUS_DB").unwrap_or_else(|_| "sqlite://sqlite.db".to_string()),
+            clerk_secret_key: env::var("ARCSTRATUS_CLERK_SECRET_KEY")
+                .unwrap_or_else(|_| "sk_test_key".to_string()),
         })
     }
 
@@ -40,5 +44,8 @@ impl Settings {
     pub fn db_addr(&self) -> &str {
         &self.db
     }
-}
 
+    pub fn clerk_config(&self) -> ClerkConfiguration {
+        ClerkConfiguration::new(None, None, Some(self.clerk_secret_key.clone()), None)
+    }
+}
