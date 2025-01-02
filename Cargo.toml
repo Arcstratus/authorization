@@ -1,0 +1,23 @@
+[package]
+name = "authorization"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# webservice
+actix-web = "4.9"
+# env
+dotenv = "0.15.0"
+# logger
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.0", features = ["env-filter"] }
+# serializer
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# databse (tokio no TLS)
+sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite"] }
+tokio = { version = "1.37", features = ["full"] }
+# error handler
+thiserror = "2.0.9"
+# other
+dirs = "5.0"
